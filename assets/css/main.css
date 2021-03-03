@@ -1,0 +1,12 @@
+body{
+    background-color: rgb(223, 223, 223);
+}
+
+.container-login {
+    width: 500px;
+    background-color: white;
+}
+.c-green {
+    color: white;
+    background-color: rgb(0, 247, 21);
+}

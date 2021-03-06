@@ -1,41 +1,50 @@
+<?php 
+    session_start();
+    if(isset($_SESSION['email'])){
+        header('location: index.php');
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Form Pendaftaran</title>
+        <title>Form Login</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <link rel="stylesheet" href="assets/css/main.css">
     </head>
     <body>
         <div class="row justify-content-center m-5">
-            <?php 
-                require_once("config.php");
-                if (isset($_POST['daftar'])){
-                    $nama = $_POST['nama'];
-                    $email = $_POST['email'];
-                    $password = md5($_POST['password']);
-                    $tlp = $_POST['tlp'];
-                    $tglLahir = $_POST['tglLahir'];
-
-                    $daftar = $config->query("INSERT INTO users (nama, email, password, tlp, tglLahir) 
-                    VALUES ('$nama', '$email', '$password', '$tlp', '$tglLahir')");
-
-                    if ($daftar) {
-                        echo "Berhasil di input";
-                    } else {
-                        echo "Gagal di input";
-                    }
-                }
-            ?>
             <form action="" method="POST" class="col-md-5 container-login p-5 rounded">
                 <div class="form-group">
-                    <h1>Form Pendaftaran</h1>
+                    <h1>Form Login</h1>
                 </div>
                 <div class="form-group">
-                    <label for=""> Nama</label>
-                    <input class="form-control" type="text" name="nama" placeholder="Input Nama">
+                    <?php 
+                        require_once("config.php");
+                        if (isset($_POST['login'])){
+                            $email = $_POST['email'];
+                            $password = md5($_POST['password']);
+
+                            $login = $config->query("SELECT * FROM users WHERE email='$email' AND password='$password'");
+                            $row = $login->num_rows;
+
+                            if ($row > 0) {
+                                $_SESSION['email'] = $email;
+                                header('location: index.php');
+                            } else {
+                                echo '
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        Anda Gagal Login
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                ';
+                            }
+                        }
+                    ?>
                 </div>
                 <div class="form-group">
                     <label for=""> Email</label>
@@ -46,16 +55,7 @@
                     <input class="form-control" type="password" name="password" placeholder="Input password">
                 </div>
                 <div class="form-group">
-                    <label for=""> Nomor Hp</label>
-                    <input class="form-control" type="number" name="tlp" placeholder="Input Nomor Hp">
-                </div>
-                <div class="form-group">
-                    <label for=""> Tanggal Lahir</label>
-                    <input class="form-control" type="date" name="tglLahir" plceholder="Input Tanggal Lahir">
-                </div>
-                <div class="form-group">
-                    <button class="form-control c-green" name="daftar" type="submit">Daftar</button>
-                    <button class="form-control btn-danger" type="reset">Reset</button>
+                    <button class="form-control c-green" name="login" type="submit">Login</button>
                 </div>
             </form>
         </div>

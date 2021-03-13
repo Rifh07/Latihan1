@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/ae907cd8df.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-info">
@@ -24,6 +25,9 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="addProduct.php">Tambah Produk <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="logout.php">LogOut <span class="sr-only">(current)</span></a>
@@ -62,7 +66,10 @@
                         <td><?php echo $data2['nama'] ?></td>
                         <td><?php echo $data['stok'] ?></td>
                         <td><?php echo $data['harga'] ?></td>
-                        <td><a href="edit.php?p=<?php echo $data['id'] ?>">Edit</a></td>
+                        <td>
+                            <a href="edit.php?p=<?php echo $data['id'] ?>"><i class="fas fa-edit"></i></a> ||
+                            <a href="delete.php?p=<?php echo $data['id'] ?>"><i class="fas fa-trash"></i></a>
+                        </td>
                     </tr>
                     <?php
                         $no++;

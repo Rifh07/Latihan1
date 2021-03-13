@@ -1,9 +1,3 @@
-<?php 
-    session_start();
-    if(!isset($_SESSION['email'])){
-        header('location: login.php');
-    }
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +9,6 @@
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
-    
     <nav class="navbar navbar-expand-lg navbar-light bg-info">
         <a class="navbar-brand" href="index.php">TOKO XYZ</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,35 +21,35 @@
                     <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
+                    <a class="nav-link" href="addProduct.php">Tambah Produk <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
                     <a class="nav-link" href="logout.php">LogOut <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    
-        <div class="row justify-content-center m-5">
+    <div class="row justify-content-center m-5">
             <form action="" method="POST" class="col-md-5 container-login p-5 rounded">
                 <div class="form-group">
-                    <h3 class="text-center">Form Edit Produk</h3>
+                    <h3 class="text-center">Form Tambah Produk</h3>
                 </div>
                 <div class="form-group">
                     <?php 
                         require_once("config.php");
-                        $param = $_GET['p'];
 
-                        if (isset($_POST['edit_produk'])){
+                        if (isset($_POST['tambah_produk'])){
                             $nama_produk = $_POST['nama_produk'];
                             $jenis = $_POST['jenis'];
                             $stok = $_POST['stok'];
                             $harga = $_POST['harga'];
-
-                            $editProduk = $config->query("UPDATE produk SET nama_produk='$nama_produk', jenis='$jenis', stok='$stok', harga='$harga' WHERE id='$param'");
-
-                            if ($editProduk) {
+                            $tambahProduk = $config->query("INSERT INTO produk (nama_produk, jenis, stok, harga) 
+                            VALUES ('$nama_produk', '$jenis', '$stok', '$harga')");
+                            if ($tambahProduk) {
                                 echo '
                                     <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        Edit Produk Berhasil
+                                        Tambah Produk Berhasil
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                         </button>
@@ -65,7 +58,7 @@
                             } else {
                                 echo '
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        Edit Produk Gagal'.$jenis.'
+                                        Tambah Produk Gagal
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                         </button>
@@ -73,37 +66,33 @@
                                 ';
                             }
                         }
-                        $query = $config->query("SELECT * FROM produk WHERE id='$param'");
-                        $data = $query->fetch_assoc();
                     ?>
                 </div>
                 <div class="form-group">
                     <label for=""> Nama Produk</label>
-                    <input class="form-control" type="text" value="<?php echo $data['nama_produk']?>" name="nama_produk" placeholder="Input Nama Produk">
+                    <input class="form-control" type="text" name="nama_produk" placeholder="Input Nama Produk">
                 </div>
                 <div class="form-group">
                     <label for=""> Jenis Produk</label>
-                    <select class="form-control" name="jenis"  selected="<?php echo $data['jenis']?>" aria-label="Default select example">
+                    <select class="form-control" name="jenis" aria-label="Default select example">
                         <option selected>Pilih Kategori</option>
                         <?php
                             $query2 = $config->query("SELECT * FROM jenis_produk");
                             while ($data2 = $query2->fetch_assoc()) {?>
-                                <option <?php if ($data['jenis'] == $data2['id']){echo "selected";}?> value="<?php echo $data2['id']?>"><?php echo $data2['nama']?></option>
-                                    <!-- echo '<option value="'.$datas['name'].'">'.$datas['name'].'</option>'; -->
+                                <option value="<?php echo $data2['id']?>"><?php echo $data2['nama']?></option>
                             <?php } ?>
                     </select>
-
                 </div>
                 <div class="form-group">
                     <label for=""> Stok Produk</label>
-                    <input class="form-control" type="number" value="<?php echo $data['stok']?>" name="stok" placeholder="Input Stok Produk">
+                    <input class="form-control" type="number" name="stok" placeholder="Input Stok Produk">
                 </div>
                 <div class="form-group">
                     <label for=""> Harga Produk</label>
-                    <input class="form-control" type="number" value="<?php echo $data['harga']?>" name="harga" placeholder="Input Harga Produk">
+                    <input class="form-control" type="number" name="harga" placeholder="Input Harga Produk">
                 </div>
                 <div class="form-group">
-                    <button class="form-control c-green" name="edit_produk" type="submit">Edit Produk</button>
+                    <button class="form-control c-green" name="tambah_produk" type="submit">Tambah Produk</button>
                 </div>
             </form>
         </div>

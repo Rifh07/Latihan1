@@ -28,11 +28,18 @@
                             $password = md5($_POST['password']);
 
                             $login = $config->query("SELECT * FROM users WHERE email='$email' AND password='$password'");
+                            $data = $login->fetch_assoc();
                             $row = $login->num_rows;
 
                             if ($row > 0) {
                                 $_SESSION['email'] = $email;
-                                header('location: index.php');
+                                $_SESSION['role'] = $data['role'];
+                                if ($data['role'] == 'Admin'){
+                                    header('location: admin/index.php');
+                                } else {
+                                    header('location: index.php');
+                                }
+                                
                             } else {
                                 echo '
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">

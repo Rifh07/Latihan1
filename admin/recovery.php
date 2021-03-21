@@ -1,3 +1,11 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['email'])){
+        header('location: ../login.php');
+    } elseif ($_SESSION['role'] !== "Admin") {
+        header('location: ../index.php');
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,44 +17,21 @@
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-info">
-        <a class="navbar-brand" href="index.php">TOKO XYZ</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="addProduct.php">Tambah Produk <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="logout.php">LogOut <span class="sr-only">(current)</span></a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <?php require_once("header.php") ?>
 
     <div class="row justify-content-center mt-5">
         <div class="col-md-5 container-login p-5 rounded">
-            <h3 class="text-center mb-5">Hapus Produk</h3>
+            <h3 class="text-center mb-5">Recovery Produk</h3>
 
             <?php 
-                require_once("config.php");
-                $param = $_GET['p'];
-                $query = $config->query("SELECT * FROM produk WHERE id='$param'");
-                $data = $query->fetch_assoc();
-
+                require_once("../config.php");
                 if(isset($_POST['yes'])) {
-                    $queryDelete = $config->query("DELETE FROM produk WHERE id='$param'");
+                    $recoveryProduk = $config->query("UPDATE produk SET hapus='false' WHERE hapus='true'");
 
-                    if($queryDelete){
+                    if($recoveryProduk){
                         echo'
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                Delete produk berhasil
+                                Recovery Produk Berhasil
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
@@ -54,7 +39,7 @@
                     } else {
                         echo'
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                Delete produk gagal
+                                Recovery Produk gagal
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
@@ -64,14 +49,14 @@
                     header('location: index.php');
                 }
             ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Apakah Anda Ingin menghapus Produk <b><?php echo $data['nama_produk'] ?></b> Ini?
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                Apakah Anda Ingin Me-recovery Produk?
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <form action="" method="POST" class="form-goup">
-                <button class="btn btn-danger" name="yes"> Yes</button>
+                <button class="btn btn-info" name="yes"> Yes</button>
                 <button class="btn btn-secondary" name="no"> No</button>
             </form>
         </div>

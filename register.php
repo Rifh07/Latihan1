@@ -1,3 +1,9 @@
+<?php 
+    session_start();
+    if(isset($_SESSION['email'])){
+        header('location: index.php');
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -24,8 +30,8 @@
                             $tlp = $_POST['tlp'];
                             $tglLahir = $_POST['tglLahir'];
 
-                            $daftar = $config->query("INSERT INTO users (nama, email, password, tlp, tglLahir) 
-                            VALUES ('$nama', '$email', '$password', '$tlp', '$tglLahir')");
+                            $daftar = $config->query("INSERT INTO users (nama, email, password, role, tlp, tglLahir) 
+                            VALUES ('$nama', '$email', '$password', 'Customer', '$tlp', '$tglLahir')");
 
                             if ($daftar) {
                                 echo '

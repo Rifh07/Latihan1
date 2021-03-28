@@ -48,9 +48,11 @@
     <div class="row m-5">
         <?php  
             require_once("config.php");
-                        
-            $query = $config->query("SELECT * FROM produk WHERE hapus='false'");
-            while ($data = $query->fetch_assoc()) {
+            
+            foreach ($_SESSION['cart'] as $id_produk => $jumlah):      
+                $query = $config->query("SELECT * FROM produk WHERE id = '$id_produk'");
+                $data = $query->fetch_assoc();
+                $subTotal = $data['harga']*$jumlah
         ?>
             <div class="col-md-4 p-3">
                 <div class="border p-3 bg-white rounded">
@@ -58,20 +60,19 @@
                     <div class="mb-3">
                         <h3 class="text-center"><?php echo $data['nama_produk'] ?></h3>
                         <div class="float-left">
-                            <p>Stok : <?php echo $data['stok'].' pcs' ?></p>
+                            <p>Jumlah : <button class="btn btn-light text-primary" type="submit"><i class="fas fa-plus"></i></button> <?php echo $jumlah ?> <button class="btn btn-light text-primary" type="submit"><i class="fas fa-minus"></i></button></p>
                         </div>
                         <div class="float-right">
-                            <p class="c-green"><?php echo 'Rp. '.number_format($data['harga'],0,',','.').',-'?></p>
+                            <p class="c-green"><?php echo 'Rp. '.number_format($subTotal,0,',','.').',-'?></p>
                         </div>
                     </div><br>
                     <form action="" method="POST" class="mb-4">
                         <input type="text" name="id" value="<?php echo $data['id']?>" hidden>
-                        <button type="submit" class="form-control btn btn-secondary" name="keranjang"><i class="fas fa-plus"></i> Keranjang</button>
-                        <button type="submit" class="form-control btn btn-success" name="beli">Beli</button>
+                        <button type="submit" class="form-control btn btn-primary" name="checkout">Checkout</button>
                     </form>
                 </div>
             </div>
-        <?php } ?>
+        <?php endforeach ?>
     </div>
 
     <!-- SCRIPT JS bootstrap -->
